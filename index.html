@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Automatic Class Characteristic Recognition in Shoe Tread Images</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Jayden Stack Susan VanderPlas Ph.D" />
+    <script src="libs/header-attrs-2.8/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/csafe.css" type="text/css" />
+    <link rel="stylesheet" href="css/csafe-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="css/this-presentation.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Automatic Class Characteristic Recognition in Shoe Tread Images
+### Jayden Stack<br/>Susan VanderPlas Ph.D
+
+---
+
+
+&lt;!-- class: inverse-blue, center, middle --&gt;
+&lt;!-- # Deep Learning: The Approach of Last Resort --&gt;
+
+
+
+
+
+---
+class: primary-blue
+## Project Description
+
+.pull-left-40[
+![Shoe Scanner Outside Setup](2021-June-1.png)
+].pull-right-60[
+- Gather images of shoe soles from the population
+
+- Identify features in the shoe sole patterns that make for a relatively unique description of the pattern
+
+- Use pattern descriptions to characterize the types of shoes worn by a population
+
+- May be useful to get a random match probability for forensic analysis
+]
+
+???
+
+The goal of this project, in forensic space, is to develop a method for sampling and assessing which shoes are common in a local population. In order to do much of anything probabilistically with forensic shoe evidence, we need to understand the local population of potential suspects, but gathering that data is not something that has been feasible up until this point. The amazing engineering team at Iowa State has built a shoe scanner that serves kind of like a field camera in the wild. As people walk over the scanner, it takes pictures of the bottom of their shoes. At the same time, we are also working hard to ensure that the shoes are the only thing that is captured in the photo. 
+
+The goal here is to then take the pictures we gather, identify features that describe the shoe tread pattern, and work with a basis of those pattern features to describe the local population. This may eventually help us calculate a random match probability between evidence at a crime scene and the local population.
+
+
+---
+class: primary-blue
+## The Scanner
+&lt;img src="2021-May-1.png" width = "30%"/&gt;&lt;img src="2021-August-2.png" width = "70%"/&gt;
+
+---
+class: primary-blue
+## Images
+
+&lt;img src="pic1.jpg" width = "40%"/&gt;
+&lt;img src="pic2.jpg" width = "40%"/&gt;
+&lt;img src="pic4.jpg" width = "40%"/&gt;
+&lt;img src="pic5.jpg" width = "40%"/&gt;
+
+
+???
+
+The scanner is able to detect the pressure being put on top of it, and then automatically take a photo of what is on top. As you might be able to notice, these images might have a little bit of reflection from either the lights in the room, or the camera itself. 
+
+---
+class: primary-blue
+## Preface
+- Before this scanner was built, there was no way to appropriately access raw images of shoe soles in nature.
+
+- Previous work on this project, had been completed on images scraped from the Zappos website. 
+
+- The difference is substantial!
+
+
+&lt;img src="image1.jpg" width = "40%"/&gt;
+&lt;img src="image2.jpg" width = "40%"/&gt;
+&lt;img src="image3.jpg" width = "40%"/&gt;
+&lt;img src="image4.jpg" width = "40%"/&gt;
+
+???
+
+As a preface to the brilliant work done by the engineers, all of the previous work that had been done on this project had been completed on images Zappos website via web scraping. While the details of the images are very clear, it is important to note that in nature, this is almost never the case. Everyone has different wear on the treads of their shoes which will make it more difficult to identify features on the bottoms of those shoes. Now that the scanner has been built, our data will now more likely mirror that of shoe images found in a forensic space. In the grander scheme of things, we now have data and the ability to collect data that can be utilized in court to show feature tendency in local populations. in Please check out the CSAFE booth where the scanner can be demonstrated and Dr. Rick Stone can answers questions that you may have. 
+---
+class: primary-blue
+## Data
+
+.pull-left[
+#### Online Shopping Data
+
+- Clearer images
+
+- Huge amounts of data available
+
+- Not representative of a local community
+
+- Not representative of data quality from the scanner
+].pull-right[
+#### Shoe Scanner data
+
+- Tread worn down, mud/dirt, glare from the scanner, outdoor lighting conditions
+
+- Less data available     
+`\(&lt;300\)` im/wk over the summer
+
+- Representative of the local community
+
+- **Plan**: Use to update a model trained on online shopping data by tuning the model weights
+]
+
+???
+
+When we started the project, we only had the online shopping images; now we have scanner images as well, So the plan is to train a model on the online shopping data, and then tweak/update the model weights to account for reduced data quality with the shoe scanner data once we get enough data out of the scanner to label and fit a model. 
+
+Some of you may be wondering why we're working with specific features of the shoe pattern instead of trying to identify the specific shoe models. There are many reasons -- first, there's no database of shoe patterns out there that match to specific shoe models. Different year models actually have different patterns, and some shoe sole patterns are shared across models. In addition, there are tons of knockoffs, and shared patterns across different brands of similar types of shoes. So in my opinion, at least, it's more productive to work with tread features and not worry about identifying specific brand/style/models of shoes. 
+
+---
+class:primary-blue
+## Statistical Development
+
+- We have been able to use machine learning to fit a model that would be able to identify some features of shoes--but with a fault.
+
+- How are we able to decipher what is actually a circle? 
+
+- The model created was able to detect circles in places that our eyes wouldn't.
+
+
+
+???
+
+The other half of the battle is being able to automatically identify which class characteristics are coming the images. We have been able to use machine learning techniques to fit a model but with flaws. The major flaw is how to know when the feature in question is actually present in the image. Most of us would be able to detect when there might be a circle in an image, but the model that has been trained is able to find circles where where we otherwise would not see them. 
+
+---
+class:primary-blue
+## Results from the first run?
+- Here is where I was thinking the pictures of the heatmaps go
+    - could be a good segway into what we are doing now?
+
+
+
+---
+
+class:primary-blue
+## Moving forward 
+
+- We are currently working on utilizing slightly more advanced machine learning techniques to pin point labeled class characteristics on images. 
+
+- The new model will be able to create a box around the feature in question and correctly predict an "objectness" score of that feature. 
+
+    - That is, this feature inside this box is 99.987% a circle. 
+    
+    - We would be able to place a baseline measurement of how high of the percentage needs to be.
+    
+???
+
+Using state-of-the-art machine learning techniques, the plan is to keep trying to fit a model that will give us what we want. After reading literature of the best methods of object-detection, 
+---
+class:primary-blue
+## Results
+
+
+
+
+---
+class:primary-blue
+## Questions
+
+- You can visit the CSAFE booth for visual demonstration of the scanner. 
+
+- Email me at jstack9@huskers.unl.edu for any questions regarding the staistical part of the project. 
+- Thank you!
+
+
+---
+
+
+&lt;!-- Relevant Features --&gt;
+
+&lt;!-- Use features other than make/model and size to characterize shoes --&gt;
+
+&lt;!-- - Knockoffs often have very similar tread patterns --&gt;
+&lt;!-- - Similar styles have similar tread patterns across brands --&gt;
+&lt;!-- - Unknown shoes can still be classified and assessed --&gt;
+
+&lt;!-- | Dr. Martens | Eastland | Timberland | --&gt;
+&lt;!-- | --- | --- | --- | --&gt;
+&lt;!-- | &lt;img src = "../Other/2019-UNL/problem-definition/dr-martens-work-2295-rigger-tan-greenland_product_114677_color_201711.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/&gt; | &lt;img src = "../Other/2019-UNL/problem-definition/eastland-1955-edition-jett-brown_product_8946957_color_6.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/&gt; | &lt;img src = "../Other/2019-UNL/problem-definition/timberland-6-premium-boot-coal-waterbuck_product_8906913_color_761877.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/&gt; | --&gt;
+&lt;!-- | Work 2295 Rigger | 1955 Edition Jett | 6" Premium Boot | --&gt;
+
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-blue --&gt;
+&lt;!-- ## The Features --&gt;
+
+
+&lt;!-- &lt;table class="featuretable"&gt; --&gt;
+&lt;!-- &lt;thead&gt;&lt;tr&gt;&lt;th style = "width:33%"&gt; Bowtie &lt;/th&gt;&lt;th style = "width:33%"&gt; Chevron &lt;/th&gt;&lt;th style = "width:33%"&gt; Circle &lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt; --&gt;
+&lt;!-- &lt;tr&gt;&lt;td&gt;&lt;img src="../Other/2019-UNL/class_examples/bowtie_examples.png" alt = "Bowtie examples"/&gt;&lt;/td&gt;&lt;td&gt;&lt;img src="../Other/2019-UNL/class_examples/chevron_examples.png" alt = "Chevron examples"/&gt;&lt;/td&gt;&lt;td&gt;&lt;img src="../Other/2019-UNL/class_examples/circle_examples.png" alt = "Circle examples"/&gt;&lt;/td&gt;&lt;/tr&gt; --&gt;
+&lt;!-- &lt;tr&gt;&lt;th&gt; Line &lt;/th&gt;&lt;th&gt; Polygon &lt;/th&gt;&lt;th&gt; Quadrilateral &lt;/th&gt;&lt;/tr&gt; --&gt;
+&lt;!-- &lt;tr&gt;&lt;td&gt;&lt;img src="../Other/2019-UNL/class_examples/line_examples.png" alt = "Line examples"/&gt;&lt;/td&gt;&lt;td&gt;&lt;img src="../Other/2019-UNL/class_examples/polygon_examples.png" alt = "Polygon examples"/&gt;&lt;/td&gt;&lt;td&gt;&lt;img src="../Other/2019-UNL/class_examples/quad_examples.png" alt = "Quadrilateral examples"/&gt;&lt;/td&gt;&lt;/tr&gt; --&gt;
+&lt;!-- &lt;tr&gt;&lt;th&gt; Star &lt;/th&gt;&lt;th&gt; Text &lt;/th&gt;&lt;th&gt; Triangle &lt;/th&gt;&lt;/tr&gt; --&gt;
+&lt;!-- &lt;tr&gt;&lt;td&gt;&lt;img src="../Other/2019-UNL/class_examples/star_examples.png" alt = "Star examples"/&gt;&lt;/td&gt;&lt;td&gt;&lt;img src="../Other/2019-UNL/class_examples/text_examples.png" alt = "Text examples"/&gt;&lt;/td&gt;&lt;td&gt;&lt;img src="../Other/2019-UNL/class_examples/triangle_examples.png" alt = "Triangle examples"/&gt;&lt;/td&gt;&lt;/tr&gt; --&gt;
+&lt;!-- &lt;/table&gt; --&gt;
+
+&lt;!-- Used to separate shoes by make/model in (small) local samples (Gross, et al., 2013) --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- When we started this project, we decided on a set of 8 features + an "other" category to catch anything that was left out. We based this on a forensics paper that found that with a similar set of features, an entire set of shoe prints gathered from college students could be differentiated into make/model groups.  --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-red --&gt;
+&lt;!-- ## Data Labeling --&gt;
+
+&lt;!-- .center.img75[![LabelMe](../Other/2019-UNL/labelme-imgs/LabelMe1.png)] --&gt;
+
+&lt;!-- &lt;!-- - [LabelMe Annotation Tool](https://github.com/CSAILVision/LabelMeAnnotationTool) (Russell, et al., 2008) --&gt; --&gt;
+
+&lt;!-- The data for this project was labeled using Label Me (and recently we've moved on to other annotation tools). Paid students and volunteers took on the tedious task of labeling features on the shoe sole images while watching Netflix, and generated an impressive amount of data.  --&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-red --&gt;
+&lt;!-- ## Data --&gt;
+
+&lt;!-- .center[&lt;img alt="Zappos Screenshot showing sole images" src="../Other/2019-UNL/labelme-imgs/zappos.png" width="60%" style="margin: 0 5%"/&gt;] --&gt;
+
+&lt;!-- - Shoe scanner *just* became viable at the end of July 2021 --&gt;
+
+&lt;!-- - [`ShoeScrapeR` package](https://github.com/srvanderplas/ShoeScrapeR) --&gt;
+
+&lt;!-- &lt;!--   --&gt; --&gt;
+&lt;!-- - 194624 images scraped since April 2018 --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- We started out using data scraped from online shoe shopping sites. We will eventually update this model with data from the shoe scanner itself (which will be messier) but when we started this project, we didn't have a working shoe scanner, so we had to make do with other data. I've had a script running 4x a day since April 2018, and while it's definitely not perfect, it has managed to pull down almost 200 thousand shoe images in the last 3 years with relatively minimal updates.  --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-blue --&gt;
+&lt;!-- ## Deep Learning --&gt;
+
+&lt;!-- ### My assumption --&gt;
+&lt;!-- &gt; If deep learning is able to accurately identify cars, planes, bicycles, and traffic lights in images, it should be able to differentiate circles from rectangles --&gt;
+
+
+&lt;!-- ### The Plan --&gt;
+
+&lt;!-- - Use VGG16 (a Convolutional Neural Network model) as the basis of the model (Simonyan, et al., 2014) --&gt;
+
+&lt;!--     - Train a new classifier focused on 9 types of shapes found in shoe soles (transfer learning) --&gt;
+
+&lt;!--     - Feed in data labeled by undergraduates --&gt;
+
+&lt;!--     - Voila! A working shoe tread feature identification model! --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- Obviously, deep learning has produced some really cool results in the past few years. If deep learning models can identify people in pictures, label dog breeds, distinguish different types of elephants, planes, cars, and such, then they should be able to recognize the simpler features we have decided to use to classify shoes, right? --&gt;
+
+&lt;!-- We should just be able to train a new model head (using transfer learning) and that will output probabilities that can be used to determine which features are in a given image. I'm glossing over how the VGG16 model works because this presentation is only 20 minutes long, and because it's a relatively simple deep learning model that would take at least 20 minutes to explain -- and it's been largely superseded by more complicated models at this point.  --&gt;
+
+&lt;!-- We figured if we had enough labeled data, that this approach would work relatively well -- and for the most part it did! But it's also important to note that this project had some pretty specific requirements -- we have a target audience and really need to make things work with our audience.  --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-blue --&gt;
+&lt;!-- ## Justifying the plan --&gt;
+
+&lt;!-- - Past studies have used the output from the convolutional network (without a trained model head) --&gt;
+
+&lt;!--     - these features aren't easy to explain to practitioners (or understand) --&gt;
+
+&lt;!--     - for any models like this to be accepted in forensics, they need to be explainable! --&gt;
+
+
+&lt;!-- &lt;br/&gt;&lt;br/&gt; --&gt;
+&lt;!-- .center[&lt;img src="let_me_explain.gif" width="50%"/&gt;] --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- Specifically, when we're done with this whole project -- the scanner and the model -- we have to convince forensic examiners that it's worth using. And forensic examiners are a great bunch of people - for the most part, they're very dedicated, very smart, and have a lot of expertise in their field. But their field is definitively not math, and most of them are not what we'd call quantitatively oriented. So that is a big limitation on what we can do with neural networks.  --&gt;
+
+&lt;!-- A lot of previous work with neural networks in forensic pattern analysis uses features directly from the model base, without a trained model head. These features don't make sense to practitioners, so the entire research project is dead before it starts, because we have to get examiners to adopt this stuff before it makes any practical impact.  --&gt;
+
+&lt;!-- We want to avoid this process, so we specifically set up this model to spit out features that we can all describe -- lines, circles, bowties, chevrons. We have to work within the confines of human language and our model has to spit out features that are explainable to examiners and can be generated by examiners. --&gt;
+
+&lt;!-- I didn't expect this to be a huge issue, given that these networks could successfully distinguish African and Asian elephants, or specific car models (both tasks that I'm really not that great at myself). So it seems reasonable that it should be able to identify what's a square and what's a circle, right? --&gt;
+
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-red --&gt;
+&lt;!-- ## Label Data --&gt;
+
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- This graph reflects the current state of class labels. There are far more quadrilaterals, lines, and text than any other category; quads in particular are more likely to appear alone than in multiple groups. Stars, polygons, and bowties are much less likely to occur; this large discrepancy in class frequency does make modeling more interesting, but again, class imbalances aren't anything new in machine learning or statistics.  --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-red --&gt;
+&lt;!-- ## Model Specification --&gt;
+&lt;!-- Multiple classes, multiple labels: "One-hot" encoding --&gt;
+
+&lt;!-- Statistically:  --&gt;
+
+&lt;!-- - Model output:  `\((P_1, ..., P_9) \in [0,1]^9\)` --&gt;
+&lt;!--     - Each geometric feature assigned a probability --&gt;
+&lt;!--     - An image can be labeled with multiple features --&gt;
+
+&lt;!-- - Output probabilities `\(P_i\)` are not independent --&gt;
+&lt;!--     - Dependencies due to CNN structure --&gt;
+&lt;!--     - Dependencies due to input data --&gt;
+&lt;!--     - Dependencies due to geometric similarity -      --&gt;
+&lt;!--     Polygons vs. Quadrilaterals --&gt;
+
+&lt;!-- - Covariance structure is ? --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- We talked previously about the model structure in a generic sense; now let's talk about the specifics. We're going to be using what's called "one hot" encoding, that is, indicator variables, and we're going to allow our model to output a separate probability for each of the 9 labeled classes; these probabilities won't sum to one, but they're not independent either. The dependency structure is complicated - output probabilities depend on the model structure, but there are also dependencies based on the geometric similarity - a quadrilateral is likely more similar to a polygon than to a line.  We don't have any real way to describe the complicated dependency structure - this is one of the downsides to using a model that's this complicated. The upside is that the model is actually capable of doing what we're asking of it; less complicated models didn't really succeed at that.  --&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-red --&gt;
+&lt;!-- ## Model Training --&gt;
+
+&lt;!-- - 256 x 256 pixel images --&gt;
+
+&lt;!-- - Training data (60-70%): --&gt;
+&lt;!--     - 1x Augmented images (rotation, skew, zoom, crop) to prevent overfitting --&gt;
+&lt;!--     - Class weights used to counteract uneven class sizes --&gt;
+
+&lt;!-- - Validation and test data (15-20% each) --&gt;
+
+&lt;!-- - Fit using the `keras` package in R, which provides a high-level API for the `tensorflow` library &lt;br/&gt; --&gt;
+
+
+&lt;!-- .bottom[ --&gt;
+&lt;!-- &lt;img src="../Other/2019-UNL/model-imgs/text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089.jpg" width = "11.5%"/&gt;  --&gt;
+&lt;!-- &lt;img src="../Other/2019-UNL/model-imgs/aug_text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089_0_1891.jpg" width = "11.5%"/&gt;  --&gt;
+&lt;!-- &lt;img src="../Other/2019-UNL/model-imgs/quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973.jpg" width = "11.5%"/&gt;  --&gt;
+&lt;!-- &lt;img src="../Other/2019-UNL/model-imgs/aug_quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973_0_7533.jpg" width = "11.5%"/&gt;  --&gt;
+&lt;!-- &lt;img src="../Other/2019-UNL/model-imgs/bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557.jpg" width = "11.5%"/&gt;  --&gt;
+&lt;!-- &lt;img src="../Other/2019-UNL/model-imgs/aug_bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557_0_8344.jpg" width = "11.5%"/&gt;  --&gt;
+&lt;!-- &lt;img src="../Other/2019-UNL/model-imgs/quad-2-puma-suede-classic-x-mac-three-port-royale-port-royale_product_9123838_color_251426.jpg" width = "11.5%"/&gt;  --&gt;
+&lt;!-- &lt;img src="../Other/2019-UNL/model-imgs/aug_quad-2-puma-suede-classic-x-mac-three-port-royale-port-royale_product_9123838_color_251426_0_5689.jpg" width = "11.5%"/&gt; --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- We scaled all of the labeled images to 256 x 256; aspect ratio was not preserved, though some steps have been taken to ensure that the labeled regions are at least square-ish where possible to prevent extreme distortion.  --&gt;
+
+&lt;!-- 60% of the labeled images were used as training data; these images were augmented once by zooming, skewing, cropping, and rotating the images. This step is recommended to prevent over-fitting. Examples of original and augmented images are shown on the right side of the slide. --&gt;
+
+&lt;!-- Validation data, which is used within each fitting iteration to calculate the loss function, accounted for 20% of the images, and test data, which is used to evaluate the model at the end of the fitting process, accounted for the remaining 20%.  --&gt;
+
+&lt;!-- We used the keras package in R to fit the model using the tensorflow toolkit. Tensorflow is an extremely efficient implementation that can use either the CPU or GPU to fit the neural network. It was originally developed by Google's Machine Intelligence team. Keras makes it easy to use VGG16, remove the model head, freeze the weights on the base, and add a new head, using only a few lines of code.  --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-red --&gt;
+&lt;!-- ## Model Training --&gt;
+
+&lt;!-- ```{r training-accuracy, fig.width = 7.5, fig.height = 5, fig.align="center", out.width = "90%", fig.cap = "Training and Validation accuracy and loss for each epoch of the fitting process. Training and validation accuracy reach 90% around epoch 14. After that point, validation loss remains about the same and training loss decreases slightly, while validation accuracy increases more slowly than training accuracy."} --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- .bottom[Binary Cross-entropy Loss:  --&gt;
+&lt;!-- `\(-y\log(p)-(1-y)\log(1-p)\)` --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- This chart shows model performance relative to the loss and accuracy rate during each epoch (backpropagation occurs after each epoch of fitting). The loss function used to fit the model is the cross-entropy function.  --&gt;
+
+&lt;!-- Validation loss levels off after 15 epochs, but hasn't yet begun to increase. Training loss is still decreasing as well. One concern with retraining the head of a CNN is that with relatively little data (e.g. 20 thousand data points instead of 150K) it is easy to over-fit models; what we see is that this hasn't yet happened for this model. Overfitting would be evident if the loss in the training set had beun to increase.  --&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class: inverse-green, center, middle --&gt;
+&lt;!-- # Assessing the Model --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## Evaluating the Model --&gt;
+
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- We can compute an aggregate ROC curve that treats all classes the same. Under this, we see that performance is generally fairly good, though there is obviously room for improvement. The more interesting evaluation is to look at prediction accuracy for each label... --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## Evaluating the Model --&gt;
+&lt;!-- &lt;!-- Add in model overall AUC --&gt; --&gt;
+&lt;!-- &lt;!-- Describe the multi-class version as splitting out model performance by class --&gt;  --&gt;
+
+
+
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- These plots show ROC curves for each class, computed separately. Equal error rates are marked with a dot, and show the point at which it is equally likely for the model to miss a classification or wrongly classify an image. These EERs are used as an optimized cutoff value for diagnostics which require a hard threshold, like a confusion matrix. Most cutoff rates are around .1, though for classes with less data, such as stars and polygons, the cutoff rate is typically smaller.  --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## Evaluating the Model --&gt;
+
+&lt;!-- ] --&gt;
+&lt;!-- .pull-right-20[ --&gt;
+&lt;!-- For multi-label images, only incorrect predictions contribute to off-diagonal probabilities.  --&gt;
+
+&lt;!-- `\(EER_i\)` used as the cutoff --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- This confusion matrix shows, for each label, the probability that the image is classified as that label as well as other possible labels. One modification we made to the standard confusion matrix was to exclude any additional "correct" labels from these calculations: If an image was labeled with a circle and a line, but the model assigned circle and triangle as labels, then in the circle column that image would register as a true positive for circle and a false positive for triangle; line would be excluded from calculations in that column. --&gt;
+
+&lt;!-- An important point to make at this juncture is that while we're operating as if our labeled data were "ground truth", that isn't an accurate assumption. People make mistakes, labeling is monotonous, and the criteria for certain classes have changed over time. In some cases, the model is correct, and the labels are wrong. We're working on correcting the labeling, but even in a situation where the labeling is done in accordance with the guidelines, some of the criteria can get fuzzy in practice.  --&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## Definitions matter --&gt;
+&lt;!-- .pull-left-80[ --&gt;
+&lt;!-- ![Classes get confusing](../Other/2019-UNL/labelme-imgs/dc_circle_quad_confusion.png) --&gt;
+
+&lt;!-- ![Not everything is labeled correctly](../Other/2019-UNL/labelme-imgs/adidas_circle_pred_correct.png) --&gt;
+
+&lt;!-- ] --&gt;
+&lt;!-- .pull-right-20[&lt;br/&gt;&lt;br/&gt;Blue: Prediction matches image label &lt;br/&gt;&lt;br/&gt;Grey: Prediction does not match image label] --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- We created a shiny application to see the images and the model's predictions. Blue means that the image had that label, grey means it does not. I've selected two images that show both correct and incorrect model classifications.  --&gt;
+
+&lt;!-- In the first image, the design is labeled as a quadrilateral and the model identifies that, but also identifies image as containing a circle very strongly. When we look at the image, the confusion is understandable. One half of the shape is angular, the other is rounded, so the shape has features of both a quadrilateral and a circle. We've decided to label these images as both (owing to the ambiguity), but that means we have to correct all of the previously labeled images. We're working on that.  --&gt;
+
+&lt;!-- In the second image, the model predicts circles, quadrilaterals, and text, but the image is labeled as having quadrilaterals and text. The circles happen to be part of the text (and the letters aren't even Os), and our brains pick up on the text but ignore the circles because we perceive things holistically; the model does not. We're also in the process of updating these labels, because again, the data is not correct; the model absolutely is.  --&gt;
+
+&lt;!-- We're trying to ensure that the data used to train the model is of very high quality, while not spending millions of dollars to hire workers online to label things. Because we determined the guidelines for labeling the data, labeled the data (or oversaw the labeling), and trained the model ourselves, we have the advantage of knowing the flaws at every point in the process; that means we have the responsibility to fix those flaws where possible.  --&gt;
+
+&lt;!-- We're not doing inference on the model results at this point (nor planning to use the data we're training the model with during the operational stage) so the data -&gt; model -&gt; fix data loop is less of a validity concern.  --&gt;
+
+&lt;!-- When the model is sufficiently well-calibrated, we can then work with engineers to build the device, collect some initial data, and tweak the model weights with new data that better represents what we'll actually see from the collection equipment. By that point, hopefully we'll also have narrowed down the geometric classification scheme so that categories that are now somewhat fuzzy are more clearly operationalized. --&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## Interpreting the model&lt;br&gt;Class Activation Maps --&gt;
+&lt;!-- .pull-left-80[ --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- ![unscaled heatmapp - DC](../Other/2019-UNL/heatmaps/heatmap-quad-4-dc-pure-se-navy_product_7270757_color_9.png) --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- Heatmaps are scaled by class. Yellow = high activation --&gt;
+&lt;!-- ].pull-right-20[&lt;br/&gt;&lt;br/&gt;Blue: Prediction matches image label &lt;br/&gt;&lt;br/&gt;Grey: Prediction does not match image label] --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- These maps, called class activation maps, show the areas of the image which most contribute to each label. Here, I've picked 3 labels to show you, 2 that are relevant, one that is not. You can see that the D shape in this image is producing labels of both circle and quadrilateral, and that the relevant parts of the D contribute to each label - the sharp corners are what the model uses when it's predicting a quadrilateral, and the rounded edges contribute to the circle.  --&gt;
+
+&lt;!-- Class activation maps are a really cool diagnostic for this type of model, because we can see exactly what the model is "thinking" about the data.  --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## Interpreting the model&lt;br&gt;Class Activation Maps --&gt;
+&lt;!-- .pull-left-80[ --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- ![unscaled heatmapp - adidas](../Other/2019-UNL/heatmaps/heatmap-test_image.png) --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- Heatmaps are scaled by class. Yellow = high activation --&gt;
+&lt;!-- ] --&gt;
+&lt;!-- .pull-right-20[&lt;br/&gt;&lt;br/&gt;Blue: Prediction matches image label &lt;br/&gt;&lt;br/&gt;Grey: Prediction does not match image label] --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- Let's look at a couple of other class activation maps for images that produced interesting conclusions.  --&gt;
+
+&lt;!-- Here's an image similar to the one I showed you earlier, with Adidas text; the heatmap is easier to see using a slightly different color. You can see that the top and bottom of the "d" are most important in determining text, but that the model is clearly cuing in to the circles inside of the a and d. It's doing exactly what we asked it to do - it just might not have been what we meant originally.  --&gt;
+
+&lt;!-- Interestingly, here is an issue with how we label images -- should we be labeling these text images as circles as well? It's an open question -- obviously the model prediction isn't wrong, but ... neither is the human-assigned label. We're just capable of recognizing that text as a class may supersede circles, and the model is ... not. --&gt;
+
+&lt;!-- Labeling things is hard, evidently. Much harder than I originally thought it would be. --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## Interpreting the model&lt;br&gt;Class Activation Maps --&gt;
+&lt;!-- .pull-left-80[ --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- ![unscaled heatmapp - seychelles](../Other/2019-UNL/heatmaps/heatmap-text-2-seychelles-slow-down-blush-metallic_product_9017725_color_34700.png) --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- &lt;br/&gt; --&gt;
+&lt;!-- Heatmaps are scaled by class. Yellow = high activation --&gt;
+&lt;!-- ] --&gt;
+&lt;!-- .pull-right-20[&lt;br/&gt;&lt;br/&gt;Blue: Prediction matches image label &lt;br/&gt;&lt;br/&gt;Grey: Prediction does not match image label] --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- Here's an example of an image where the model is strongly suggesting there are circles, but where we would not agree. It's not hard to see why the model thinks circles would be here, but if it isn't a closed loop, I can't in good conscience suggest it's a circle. Just because the model says something with confidence doesn't mean we change the labels on the original image. It's a screening tool, but we don't want to inflate the model's accuracy at the expense of the actual accuracy. --&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## So what went wrong? --&gt;
+
+&lt;!-- A few options: --&gt;
+
+&lt;!-- - Data labeling is wrong and should be adjusted --&gt;
+
+&lt;!-- - Shoe patterns are too complicated to be summarized and labeled with simple geometric shapes -- there is too much other context needed --&gt;
+
+&lt;!-- - There is a difference between recognizing simple shapes and recognizing objects in complex organic images.  --&gt;
+&lt;!--     - We used the wrong model base --&gt;
+&lt;!--     - We're asking too much in general - models can't handle human labeling nuances --&gt;
+
+
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- After looking at the class activation map diagnostics, it's pretty clear that there are a few things "wrong" with our original model. For one thing, we can certainly say that our data isn't labeled optimally - human labelers missed things. Our labeling scheme as a whole has class overlaps between e.g. circles and text. And we weren't great at specifying how to handle e.g. rounded corners on a square, or how to distinguish when something is a square and when it is a circle. That turns out to be a pretty interesting problem, really. --&gt;
+
+&lt;!-- It's possible that shoe patterns are too complicated to be labeled with simple geometric shapes, but examiners have been doing just that for 50 years. So the real issue is figuring out how to get human levels of nuance into a deep learning model. --&gt;
+
+&lt;!-- Finally, it's possible that the models we're using just aren't the right model. Maybe VGG16 isn't capable of the global context that some other model like ResNet or YOLO would be capable of.  --&gt;
+&lt;!-- It's important to note that this isn't a total failure - in the end, we can use the predictions from the labels as features even if they're not 100% accurate. But, it would be nice to have a model that didn't fail in weird ways with inputs that occur fairly frequently - it's not like Adidas or DC shoes are uncommon. --&gt;
+
+&lt;!-- So after puzzling over this model for the better part of 2 years, I recently found a python script that would generate shapes for me, allowing me to do a little more investigation into how the model handles geometric shapes. --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## "Shape" model --&gt;
+
+&lt;!-- - Fit a model to simple shapes (3-9 sided regular polygons, circles, stars) --&gt;
+&lt;!--     - Data generated using `elkorchi/2DGeometricShapesGenerator`'s github repo + scripts --&gt;
+
+&lt;!--     - Major differences in data: --&gt;
+&lt;!--         - only one shape per image --&gt;
+&lt;!--         - no rounded corners --&gt;
+&lt;!--         - not photographs, relatively high contrast --&gt;
+&lt;!--         - everything labeled properly --&gt;
+
+&lt;!-- - Determine where the model succeeds and fails --&gt;
+&lt;!--     - Test on ambiguous shapes (spirals, squircles) --&gt;
+&lt;!--     - Adapt the data generation script to be more realistic --&gt;
+&lt;!--     - Refit --&gt;
+
+&lt;!-- &lt;img src="Circle_f3626260-f536-11eb-abf7-9fba851ba9a5.png" width = "10%"/&gt; --&gt;
+&lt;!-- &lt;img src="Nonagon_59c72fcc-f537-11eb-abf7-9fba851ba9a5.png" width = "10%"/&gt; --&gt;
+&lt;!-- &lt;img src="Octagon_c5fcc7e0-f534-11eb-abf7-9fba851ba9a5.png" width = "10%"/&gt; --&gt;
+&lt;!-- &lt;img src="Heptagon_8dcdebb0-f534-11eb-abf7-9fba851ba9a5.png" width = "10%"/&gt; --&gt;
+&lt;!-- &lt;img src="Hexagon_3705a8d0-f535-11eb-abf7-9fba851ba9a5.png" width = "10%"/&gt; --&gt;
+&lt;!-- &lt;img src="Pentagon_545035fe-f535-11eb-abf7-9fba851ba9a5.png" width = "10%"/&gt; --&gt;
+&lt;!-- &lt;img src="Square_de356aa4-f536-11eb-abf7-9fba851ba9a5.png" width = "10%"/&gt; --&gt;
+&lt;!-- &lt;img src="Triangle_ee6369d4-f532-11eb-b951-87fbe209f7be.png" width = "10%"/&gt; --&gt;
+&lt;!-- &lt;img src="Star_fea0ff28-f532-11eb-b760-e3f8d74de562.png" width = "10%"/&gt; --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- Fundamentally, what I wanted to do was to fit a model to simple shapes and see how the same model fitting process would work. This will help distinguish between "VGG16 can't handle this" and "we have a data quality issue". There are some major differences in the data at this point -- for one thing, each image has only one class, but also, we don't have rounded corners, images are synthetic and high contrast, and there are no labeling issues at all because we're specifically generating shapes that fall into each particular class.  --&gt;
+
+&lt;!-- But, with this, we can also test on ambiguous shapes and see what happens. --&gt;
+
+&lt;!-- Now, this is relatively recent work, and my Python coding skills aren't up to date, so I'm going to show you to the tip of the iceberg here, and hopefully soon I'll get back up on my Python skills enough to change the script and e.g. add multiple shapes to the image, or allow rounded corners. Then this little side project will be even more useful. But fundamentally, I used the same script to fit this model as the shoe model, so any interesting things should carry over between the two models.  --&gt;
+
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## Evaluating the Shape Model --&gt;
+&lt;!-- &lt;!-- Add in model overall AUC --&gt; --&gt;
+&lt;!-- &lt;!-- Describe the multi-class version as splitting out model performance by class --&gt;  --&gt;
+
+
+
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- When we look at how the model is working with the 9 classes generated by the original python script, what I'm seeing is that the model does extremely well for stars, triangles, squares, and even pentagons, but performance quickly starts to degrade a bit for higher n-agons. Still, the model works much better for basic shapes than it does for real-world shoe images (which isn't surprising given the e.g. lack of rounded corners, and lack of real-world imagery).  --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## Evaluating the Shape Model --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- If we look at the confusion matrix, we see that this model based on VGG16 isn't great at distinguishing sides/angles. So there's a lot of cross-class confusion between n and n+1 gons, and even between nonagons and circles. --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-green --&gt;
+&lt;!-- ## Evaluating the Shape Model --&gt;
+
+&lt;!-- Image | Circ| Tri* | Square | Penta* | Hexa* | Hepta* | Octa* | Nona* | Star --&gt;
+&lt;!-- --- | --- |  --- |  --- |  --- |  --- |  --- |  --- |  ---  --&gt;
+&lt;!-- ![](spiral.png) | .9998986 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 --&gt;
+&lt;!-- ![](sqircle.png) | .9999964 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- Just for fun, I created a couple of images in the style of the images used to fit this model, but that represented things we noticed as problematic in the shoe model.  --&gt;
+
+&lt;!-- One thing that sticks out to me is that the squircle doesn't show up as a square with any significant probability. I suspect that this is because our squares in the training data don't have rounded corners, which is of course easier to achieve with generated data than with things that are actually cast from rubber. I'm not great with python, so I'm going to have to actually go in and add a bit of corner rounding to address this issue and see what's going on -- whether it's a problem where the shoe data is poorly labeled, or whether it's strictly due to the roundness or sharpness of the corners.  --&gt;
+
+&lt;!-- So what I really need to do to further investigate this model is to add rounded corners and multi-class images to the training data and then examine whether I can fit a CNN to synthetic data with acceptable performance. If I can, then the answer is to come up with better labels, more precise labels, and possibly to only train on unambiguous images.  --&gt;
+
+&lt;!-- But, as we discovered with the polygon experiment, there are also some things that CNNs will just inherently have trouble with, and so I also need to design my class labels to not only be human-friendly, but also to be CNN-friendly.  --&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class:inverse-cyan,middle,center --&gt;
+&lt;!-- # Conclusion and Questions --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- So I've meandered through this research project in a way that I hope makes sense, but it might be good to take a moment to recap. --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-cyan --&gt;
+&lt;!-- ## Conclusions --&gt;
+
+&lt;!-- - Class activation maps are really helpful for diagnosing problematic deep learning models --&gt;
+
+&lt;!-- - It's also useful to step away from real-world data and see what deep learning models do with synthetic data  --&gt;
+
+&lt;!-- - Labeling things is HARD! --&gt;
+
+&lt;!--     - Labeling things to be friendly to both computers and humans is... extremely hard. --&gt;
+
+
+&lt;!-- .center[![Research is hard gif](https://media2.giphy.com/media/3oxHQr6r2x0GqGnois/giphy.gif)] --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- As I promised to talk about computer vision diagnostics, I'd just like to say that class activation maps are perhaps my favorite diagnostic for these types of models. They really help you see what the model is "seeing" and reason about how to fix any problems that pop up. --&gt;
+
+&lt;!-- But, the other thing is that with deep learning models that are largely black boxes, traditional debugging techniques like using synthetic data are exceptionally valuable as well - they can help you figure out the limits of your modeling approach, in the same way that simulating fitting a GLM with data that violates assumptions can really help you figure out how much trouble you're in with traditional statistical models. --&gt;
+
+&lt;!-- My final conclusion is that labeling things is a lot harder than I ever anticipated, and doing so in a way that satisfies both humans and computers is *really* hard. But where's the fun in research if you don't take on some of these problems? --&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class:primary-cyan --&gt;
+&lt;!-- ## Questions --&gt;
+
+&lt;!-- - email me at susan.vanderplas@unl.edu --&gt;
+
+&lt;!-- - message me on Twitter (@srvanderplas) --&gt;
+
+&lt;!-- I may take a couple of weeks to respond due to maternity leave. --&gt;
+
+&lt;!-- .center[![Newborn napping gif](https://media3.giphy.com/media/3oKIP8yXbGF6upLI40/giphy.gif)] --&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
