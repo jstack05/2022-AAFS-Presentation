@@ -52,7 +52,7 @@ class: primary-blue
 ## Project Description
 
 .pull-left-40[
-![Shoe Scanner Outside Setup](2021-June-1.png)
+![Shoe Scanner Outside Setup](Images/2021-June-1.png)
 ].pull-right-60[
 - Gather images of shoe soles from the population
 
@@ -73,16 +73,16 @@ The goal here is to then take the pictures we gather, identify features that des
 ---
 class: primary-blue
 ## The Scanner
-<img src="2021-May-1.png" width = "30%"/><img src="2021-August-2.png" width = "70%"/>
+<img src="Images/2021-May-1.png" width = "30%"/><img src="Images/2021-August-2.png" width = "70%"/>
 
 ---
 class: primary-blue
 ## Images
 
-<img src="pic1.jpg" width = "40%"/>
-<img src="pic2.jpg" width = "40%"/>
-<img src="pic4.jpg" width = "40%"/>
-<img src="pic5.jpg" width = "40%"/>
+<img src="Images/pic1.jpg" width = "40%"/>
+<img src="Images/pic2.jpg" width = "40%"/>
+<img src="Images/pic4.jpg" width = "40%"/>
+<img src="Images/pic5.jpg" width = "40%"/>
 
 
 ???
@@ -99,10 +99,10 @@ class: primary-blue
 - The difference is substantial!
 
 
-<img src="image1.jpg" width = "40%"/>
-<img src="image2.jpg" width = "40%"/>
-<img src="image3.jpg" width = "40%"/>
-<img src="image4.jpg" width = "40%"/>
+<img src="Images/image1.jpg" width = "40%"/>
+<img src="Images/image2.jpg" width = "40%"/>
+<img src="Images/image3.jpg" width = "40%"/>
+<img src="Images/image4.jpg" width = "40%"/>
 
 ???
 
