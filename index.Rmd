@@ -92,9 +92,9 @@ The scanner is able to detect the pressure being put on top of it, and then auto
 ---
 class: primary-blue
 ## Preface
-- Before this scanner was built, there was no way to appropriately access raw images of shoe soles in nature.
+- Before this scanner was built, there was no way to easily access raw images of shoe soles in the population
 
-- Previous work on this project, had been completed on images scraped from the Zappos website. 
+- Previous work on this project, had been completed on images scraped from the Zappos website
 
 - The difference is substantial!
 
