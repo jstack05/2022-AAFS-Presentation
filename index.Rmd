@@ -1,18 +1,13 @@
 ---
 title: "Automatic Class Characteristic Recognition in Shoe Tread Images"
-author: "Jayden Stack<br/>Susan VanderPlas Ph.D"
+author: "Jayden Stack, Rick Stone,  Colton Fales, and Susan VanderPlas"
 output:
   xaringan::moon_reader:
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     css: ["default", "css/csafe.css", "css/csafe-fonts.css", "css/this-presentation.css"]
     lib_dir: libs
     nature:
       countIncrementalSlides: false
 ---
-
-<!-- class: inverse-blue, center, middle -->
-<!-- # Deep Learning: The Approach of Last Resort -->
-
 
 ```{r load_refs, echo=FALSE, cache=FALSE, include = F}
 library(RefManageR)
@@ -47,20 +42,63 @@ knitr::opts_chunk$set(dev.args = list(bg = 'transparent'),
 
 
 ```
+
+class: inverse-blue
+## Outline
+<br/><br/>
+
+.large[
+
+- Motivation and Project Goals
+
+- Scanner Images
+
+- Statistical Modeling
+
+- Future Work
+
+]
+
 ---
-class: primary-blue
-## Project Description
+class:inverse-red,middle,center
+
+# Motivation
+
+---
+class:primary-red
+## Footwear Reference Populations
+
+### What is the probability of a coincidental match?
+
+1. Define the comparison population
+2. Sample from the comparison population ( $N$ shoes)
+3. Identify similar shoes from the comparison population ( $S$ of the $N$ shoes)
+4. Estimate the probability of a coincidental match ( $\hat{p} = S/N$ )
+
+???
+
+Statistical assessment of footwear has been difficult historically, at least in part because we lack data on the reference population. If we wanted to estimate the probability of a coincidental match in footwear, like we do with DNA analysis, we would need to do the following: ...
+
+The issue is that we don't have any way to get data on the comparison population in footwear. There's no easy way to gather that data at the moment, and even if we could gather it, we don't have any way to identify similar shoes based on features. 
+
+Something like 95% of footwear evidence in the US is based on class characteristic matches, so this is not a trivial problem - we need more information about class characteristics in local populations.
+
+---
+class: primary-red
+## Objectives
 
 .pull-left-40[
 ![Shoe Scanner Outside Setup](Images/2021-June-1.png)
 ].pull-right-60[
-- Gather images of shoe soles from the population
+- Develop a shoe scanner that can gather population footwear data automatically
+
+- Use the scanner to gather images of shoe soles from the population
 
 - Identify features in the shoe sole patterns that make for a relatively unique description of the pattern
 
 - Use pattern descriptions to characterize the types of shoes worn by a population
 
-- May be useful to get a random match probability for forensic analysis
+- Eventually, maybe use this data to get a random match probability for forensic analysis
 ]
 
 ???
@@ -71,13 +109,21 @@ The goal here is to then take the pictures we gather, identify features that des
 
 
 ---
-class: primary-blue
+class: primary-red
 ## The Scanner
 <img src="Images/2021-May-1.png" width = "30%"/><img src="Images/2021-August-2.png" width = "70%"/>
 
+The scanner is on display at the CSAFE booth!
+
+
 ---
-class: primary-blue
-## Images
+class: inverse-cyan,middle,center
+# Scanner Images
+
+
+---
+class: primary-cyan
+## Indoor Testing
 
 <img src="Images/pic1.jpg" width = "40%"/>
 <img src="Images/pic2.jpg" width = "40%"/>
@@ -90,26 +136,30 @@ class: primary-blue
 The scanner is able to detect the pressure being put on top of it, and then automatically take a photo of what is on top. As you might be able to notice, these images might have a little bit of reflection from either the lights in the room, or the camera itself. 
 
 ---
-class: primary-blue
-## Preface
-- Before this scanner was built, there was no way to easily access raw images of shoe soles in the population
+class: primary-cyan
+## Image Quality Comparisons
 
-- Previous work on this project, had been completed on images scraped from the Zappos website
+- Before this scanner was built, there was no way to easily obtain raw images or prints of shoe soles in the general population
+    - Studies were small scale and required lots of manual labor to gather a small amount of data `r Citep(bb, "benedict_geographical_2014", .opts = list(max.names = 1, longnamesfirst = F))`
+
+- Many computational studies use marketing-quality images scraped from the web `r Citep(bb, c("kongCrossDomainImageMatching2019", "kongCrossDomainForensicShoeprint2017", "fowlkesStatisticalModelsGeneration2018"), .opts = list(max.names = 1, longnamesfirst=F))`
 
 - The difference is substantial!
 
-
-<img src="Images/image1.jpg" width = "40%"/>
-<img src="Images/image2.jpg" width = "40%"/>
-<img src="Images/image3.jpg" width = "40%"/>
-<img src="Images/image4.jpg" width = "40%"/>
+<img src="Images/image1.jpg" width = "30%"/>
+<img src="Images/image2.jpg" width = "30%"/>
+<img src="Images/image3.jpg" width = "30%"/>
+<img src="Images/GOPR8318.JPG" width = "30%"/>
+<img src="Images/GOPR8320.JPG" width = "30%"/>
+<img src="Images/GOPR8341.JPG" width = "30%"/>
 
 ???
 
 As a preface to the brilliant work done by the engineers, all of the previous work that had been done on this project had been completed on images Zappos website via web scraping. While the details of the images are very clear, it is important to note that in nature, this is almost never the case. Everyone has different wear on the treads of their shoes which will make it more difficult to identify features on the bottoms of those shoes. Now that the scanner has been built, our data will now more likely mirror that of shoe images found in a forensic space. In the grander scheme of things, we now have data and the ability to collect data that can be utilized in court to show feature tendency in local populations. in Please check out the CSAFE booth where the scanner can be demonstrated and Dr. Rick Stone can answers questions that you may have. 
+
 ---
-class: primary-blue
-## Data
+class: primary-cyan
+## Comparison Data
 
 .pull-left[
 #### Online Shopping Data
@@ -131,7 +181,7 @@ $<300$ im/wk over the summer
 
 - Representative of the local community
 
-- **Plan**: Use to update a model trained on online shopping data by tuning the model weights
+- **Plan**: Combine both datasets! Update a model trained on online shopping data with messier scanner data.
 ]
 
 ???
@@ -141,32 +191,61 @@ When we started the project, we only had the online shopping images; now we have
 Some of you may be wondering why we're working with specific features of the shoe pattern instead of trying to identify the specific shoe models. There are many reasons -- first, there's no database of shoe patterns out there that match to specific shoe models. Different year models actually have different patterns, and some shoe sole patterns are shared across models. In addition, there are tons of knockoffs, and shared patterns across different brands of similar types of shoes. So in my opinion, at least, it's more productive to work with tread features and not worry about identifying specific brand/style/models of shoes. 
 
 ---
-class:primary-blue
-## Statistical Development
+class:inverse-green,center,middle
+# Statistical Modeling
 
-- We have been able to use machine learning to fit a model that would be able to identify some features of shoes--but with a fault.
+---
+class:primary-green
+## Statistical Modeling
 
-- How are we able to decipher what is actually a circle? 
+- **Transfer Learning**
+    - Take a model trained for something else and tune it to work with a new type of data
+    - Leverages past work on computer vision
+    - Customizes the work for a specific task (shoe pattern recognition)
 
-- The model created was able to detect circles in places that our eyes wouldn't.
 
-
+- 2 stages of transfer in this project:
+    1. Use computational models for image recognition to recognize features in marketing-quality shoe images
+        - Initial data: Photographs
+        - Initial features: identify cats, dogs, etc.
+        - Target data: Photographs of shoes
+        - Target features: identify tread pattern elements like circles, chevrons, logos, sizes, and brand
+    2. Use shoe feature recognition model to identify features in "messy" scanner images
 
 ???
 
 The other half of the battle is being able to automatically identify which class characteristics are coming the images. We have been able to use machine learning techniques to fit a model but with flaws. The major flaw is how to know when the feature in question is actually present in the image. Most of us would be able to detect when there might be a circle in an image, but the model that has been trained is able to find circles where where we otherwise would not see them. 
 
 ---
-class:primary-blue
-## Results from the first run?
-- Here is where I was thinking the pictures of the heatmaps go
-    - could be a good segway into what we are doing now?
+class:primary-green
+## Challenges
 
+- It's hard for us to define a circle
 
+![Heatmap of Squircle](Images/heatmap-quad-4-dc-pure-se-navy_product_7270757_color_9.png)
+![Heatmap of Adidas text](Images/heatmap-test_image.png)
 
 ---
+class:primary-green
+## Challenges
 
-class:primary-blue
+- It's hard for computer vision models to identify a circle
+
+![Heatmap of Spiral text](Images/heatmap-text-2-seychelles-slow-down-blush-metallic_product_9017725_color_34700.png)
+
+Conclusion: Things that are relatively easy for humans are hard for computers. 
+
+???
+
+While we want to use human-friendly descriptors, it's very difficult for us to train computer models in ways that match human use of language precisely, especially for patterns like those on shoe soles.
+
+---
+class:inverse-grey,middle,center
+
+# Future Work
+
+---
+class:primary-grey
 ## Moving forward 
 
 - We are currently working on utilizing slightly more advanced machine learning techniques to pin point labeled class characteristics on images. 
@@ -180,19 +259,33 @@ class:primary-blue
 ???
 
 Using state-of-the-art machine learning techniques, the plan is to keep trying to fit a model that will give us what we want. After reading literature of the best methods of object-detection, 
----
-class:primary-blue
-## Results
-
 
 
 
 ---
-class:primary-blue
+class:primary-grey
+## Acknowledgements
+
+Work on this project was supported by:
+
+- National Institutes of Justice (2019-MU-MU-4096)
+
+- Center for Statistical Applications in Forensic Evidence (CSAFE) through
+Cooperative Agreements 70NANB15H176 and 70NANB20H019 between NIST and Iowa State University, which includes activities
+carried out at Carnegie Mellon University, Duke University, University of California Irvine, University of Virginia, West Virginia
+University, University of Pennsylvania, Swarthmore College and University of Nebraska, Lincoln.
+
+---
+class:primary-grey
 ## Questions
 
-- You can visit the CSAFE booth for visual demonstration of the scanner. 
+- We are looking for collaborations with practitioners
 
-- Email me at jstack9@huskers.unl.edu for any questions regarding the staistical part of the project. 
-- Thank you!
+- See the scanner prototype at the CSAFE booth
+
+- Email us with any additional questions or to discuss collaboration!
+    - Jayden Stack: jstack9@huskers.unl.edu 
+    - Dr. Vanderplas: susan.vanderplas@unl.edu
+
+
 
